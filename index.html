@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ebru Burcu İshakoğlu">
+    <meta name="keywords" content="Ebru Burcu İshakoğlu, moda tasarımcısı ve stilist">
+    <title>Ebru Burcu İshakoğlu - Moda Tasarım ve Stilist Portfolyosu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary: #5e35b1;
+            --secondary: #ff4081;
+            --light: #f5f3ff;
+            --dark: #1e293b;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            color: var(--dark);
+            scroll-behavior: smooth;
+        }
+        
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .section-transition {
+            transition: all 0.6s ease-in-out;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .section-transition:hover {
+            background-color: #f8fafc;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .enlarge {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        
+        .enlarge.clicked {
+            transform: scale(2.5);
+            z-index: 1000;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 999;
+            display: none;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(94, 53, 177, 0.85);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-5px);
+            color: var(--secondary);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+            background: var(--secondary);
+            transform: translateY(-5px);
+        }
+        
+        .skill-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 24px;
+            width: 2px;
+            height: calc(100% + 25px);
+            background: var(--primary);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+<body class="font-roboto text-gray-800">
+    <!-- Overlay for enlarged images -->
+    <div class="overlay" id="image-overlay"></div>
+
+    <!-- Back to top button -->
+    <div class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-gray-900 font-playfair">Ebru Burcu <span class="gradient-text">İshakoğlu</span></h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-lg text-gray-700 nav-link">Hakkımda</a>
+                <a href="#experience" class="text-lg text-gray-700 nav-link">Deneyim</a>
+                <a href="#skills" class="text-lg text-gray-700 nav-link">Beceriler</a>
+                <a href="#portfolio" class="text-lg text-gray-700 nav-link">Portfolyo</a>
+                <a href="#education" class="text-lg text-gray-700 nav-link">Eğitim</a>
+                <a href="#certifications" class="text-lg text-gray-700 nav-link">Sertifikalar</a>
+                <a href="#testimonials" class="text-lg text-gray-700 nav-link">Yorumlar</a>
+                <a href="#contact" class="text-lg text-gray-700 nav-link">İletişim</a>
+            </div>
+            <button id="menu-toggle" class="md:hidden text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-md p-4 absolute w-full">
+            <a href="#about" class="block text-gray-700 hover:text-blue-600 py-2">Hakkımda</a>
+            <a href="#experience" class="block text-gray-700 hover:text-blue-600 py-2">Deneyim</a>
+            <a href="#skills" class="block text-gray-700 hover:text-blue-600 py-2">Beceriler</a>
+            <a href="#portfolio" class="block text-gray-700 hover:text-blue-600 py-2">Portfolyo</a>
+            <a href="#education" class="block text-gray-700 hover:text-blue-600 py-2">Eğitim</a>
+            <a href="#certifications" class="block text-gray-700 hover:text-blue-600 py-2">Sertifikalar</a>
+            <a href="#testimonials" class="block text-gray-700 hover:text-blue-600 py-2">Yorumlar</a>
+            <a href="#contact" class="block text-gray-700 hover:text-blue-600 py-2">İletişim</a>
+        </div>
+    </nav>
+
+    <!-- Hero/About Section -->
+    <section id="about" class="min-h-screen flex items-center pt-32 bg-gradient-to-br from-indigo-50 to-purple-100">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 flex justify-center animate__animated animate__fadeInLeft">
+                <div class="relative">
+                    <img src="image.png" alt="Ebru Burcu Fotoğrafı" class="rounded-full w-80 h-80 object-cover shadow-2xl border-4 border-white enlarge" onclick="enlargeImage(this)">
+                    <div class="absolute -bottom-4 -right-4 bg-white p-4 rounded-full shadow-xl">
+                        <div class="text-center">
+                            <p class="font-bold text-lg">20+</p>
+                            <p class="text-sm text-gray-600">Yıllık Deneyim</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 text-center md:text-left mt-16 md:mt-0 md:pl-12">
+                <h2 class="text-5xl font-bold text-gray-900 font-playfair mb-6 animate__animated animate__fadeInRight">Merhaba, Ben <span class="gradient-text">Ebru Burcu</span></h2>
+                <h3 class="text-2xl text-indigo-600 mb-8 animate__animated animate__fadeInUp">Profesyonel Moda Tasarımcısı ve Stilist</h3>
+                <p class="text-xl text-gray-700 leading-relaxed mb-8 animate__animated animate__fadeInUp">
+                    20 yılı aşkın süredir moda sektöründe stilist ve modelist olarak çalışıyorum. Kadın ve çocuk giyimi koleksiyonları tasarlıyor, kalıp hazırlama, drapaj ve üretim süreçlerini yönetiyorum. Laleli piyasasına hakimim ve trendleri yakından takip ederek özgün tasarımlar ortaya koyuyorum. Tutkum, her bir koleksiyonla estetik ve fonksiyonelliği bir araya getirmek.
+                </p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-8">
+                    <a href="#portfolio" class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">Portfolyomu İncele</a>
+                    <a href="#contact" class="px-8 py-3 bg-white text-indigo-600 border-2 border-indigo-600 rounded-full font-semibold hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl">İletişime Geç</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4 font-playfair">İş Deneyimi</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">20 yılı aşkın süredir moda sektöründe edindiğim deneyimler ve uzmanlık alanlarım</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="timeline-item">
+                    <h3 class="text-2xl font-semibold text-gray-800">Stilist - LAMAX / İstanbul</h3>
+                    <p class="text-indigo-600 text-lg font-medium">2022 - 2024</p>
+                    <p class="text-gray-700 text-lg mt-4">
+                        Kadın giyimi için model tasarımları geliştirdim, aksesuar seçim ve takip süreçlerini yönettim. Laleli piyasasının trendlerine uygun koleksiyonlar hazırladım.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Koleksiyon Tasarımı</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Aksesuar Seçimi</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Trend Analizi</span>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-2xl font-semibold text-gray-800">Stilist - SLM Tekstil / İstanbul</h3>
+                    <p class="text-indigo-600 text-lg font-medium">2020 - 2022</p>
+                    <p class="text-gray-700 text-lg mt-4">
+                        Çocuk giyimi üzerine uzmanlaştım. Tasarımdan üretime kadar tüm süreçleri yönettim, nakış ve baskı uygulamalarını takip ettim.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Çocuk Giyimi</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Nakış Tasarımı</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Üretim Yönetimi</span>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-2xl font-semibold text-gray-800">Modelist - DARKMEN / İstanbul</h3>
+                    <p class="text-indigo-600 text-lg font-medium">2019 - 2020</p>
+                    <p class="text-gray-700 text-lg mt-4">
+                        Büyük beden kadın giyimi için örme ve dokuma kumaşlarla çalıştım. Müşteri sunumları, baskı ve nakış takibi yaptım.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Büyük Beden</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Kalıp Hazırlama</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Kumaş Analizi</span>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-2xl font-semibold text-gray-800">Modelist & Stilist / IBOCAN Tekstil</h3>
+                    <p class="text-indigo-600 text-lg font-medium">2003 - 2019</p>
+                    <p class="text-gray-700 text-lg mt-4">
+                        16 yıl boyunca triko ve dokuma koleksiyonları tasarladım, kalıptan üretime tüm süreçleri yönettim.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Triko Tasarım</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Koleksiyon Yönetimi</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Üretim Süreçleri</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 bg-gradient-to-r from-indigo-50 to-purple-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4 font-playfair">Uzmanlık Alanlarım</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Moda tasarımı ve üretim süreçlerinde uzmanlaştığım beceriler</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Kadın ve Çocuk Giyimi Tasarımı</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="95"></div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 mt-6">Elde Kalıp Hazırlama & Drapaj</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="90"></div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 mt-6">Kumaş Bilgisi</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="85"></div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Dikiş Teknikleri</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="88"></div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 mt-6">Üretim Süreci Yönetimi</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="92"></div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 mt-6">Laleli Piyasası</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="98"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-ruler-combined text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg">Kalıp Hazırlama</h3>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cut text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg">Drapaj</h3>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-palette text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg">Renk Uyumu</h3>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-tshirt text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg">Kumaş Seçimi</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4 font-playfair">Portfolyo</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Son yıllarda tasarladığım öne çıkan koleksiyonlar ve projeler</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="portfolio-item relative rounded-2xl overflow-hidden shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Çocuk Giyimi" class="w-full h-64 object-cover enlarge" onclick="enlargeImage(this)">
+                    <div class="portfolio-overlay">
+                        <h3 class="text-xl font-semibold">Çocuk Giyimi Koleksiyonu</h3>
+                        <p class="mt-2">SLM Tekstil için tasarlanan renkli ve rahat çocuk kıyafetleri</p>
+                        <p class="mt-4 text-sm">2022 Yaz Koleksiyonu</p>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item relative rounded-2xl overflow-hidden shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Kadın Giyimi" class="w-full h-64 object-cover enlarge" onclick="enlargeImage(this)">
+                    <div class="portfolio-overlay">
+                        <h3 class="text-xl font-semibold">Kadın Giyimi Koleksiyonu</h3>
+                        <p class="mt-2">LAMAX için modern ve şık kadın kıyafetleri</p>
+                        <p class="mt-4 text-sm">2023 Sonbahar/Kış Koleksiyonu</p>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item relative rounded-2xl overflow-hidden shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Triko" class="w-full h-64 object-cover enlarge" onclick="enlargeImage(this)">
+                    <div class="portfolio-overlay">
+                        <h3 class="text-xl font-semibold">Triko Koleksiyonu</h3>
+                        <p class="mt-2">IBOCAN Tekstil için tasarlanan zarif triko modeller</p>
+                        <p class="mt-4 text-sm">2021 Kış Koleksiyonu</p>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item relative rounded-2xl overflow-hidden shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Nakış" class="w-full h-64 object-cover enlarge" onclick="enlargeImage(this)">
+                    <div class="portfolio-overlay">
+                        <h3 class="text-xl font-semibold">Nakış Detaylı Tasarımlar</h3>
+                        <p class="mt-2">SLM Tekstil için özel nakış uygulamaları</p>
+                        <p class="mt-4 text-sm">2020 İlkbahar Koleksiyonu</p>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item relative rounded-2xl overflow-hidden shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Aksesuar" class="w-full h-64 object-cover enlarge" onclick="enlargeImage(this)">
+                    <div class="portfolio-overlay">
+                        <h3 class="text-xl font-semibold">Aksesuarlı Koleksiyon</h3>
+                        <p class="mt-2">LAMAX için aksesuarlarla tamamlanan tasarımlar</p>
+                        <p class="mt-4 text-sm">2023 Yaz Koleksiyonu</p>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item relative rounded-2xl overflow-hidden shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1550614000-4895a10e1bfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Büyük Beden" class="w-full h-64 object-cover enlarge" onclick="enlargeImage(this)">
+                    <div class="portfolio-overlay">
+                        <h3 class="text-xl font-semibold">Büyük Beden Koleksiyonu</h3>
+                        <p class="mt-2">DARKMEN için tasarlanan özel büyük beden modeller</p>
+                        <p class="mt-4 text-sm">2019 Sonbahar Koleksiyonu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="py-24 bg-gradient-to-r from-indigo-50 to-purple-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4 font-playfair">Sertifikalar</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Moda tasarımı ve tekstil alanında aldığım uzmanlık sertifikaları</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale transform hover:shadow-2xl transition duration-300">
+                    <div class="bg-indigo-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-award text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Moda Tasarımı ve Kalıp Çıkarma</h3>
+                    <p class="text-indigo-600">İstanbul Moda Akademisi - 2018</p>
+                    <p class="text-gray-600 mt-4">Profesyonel kalıp hazırlama ve moda tasarımı teknikleri üzerine uzmanlık eğitimi</p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale transform hover:shadow-2xl transition duration-300">
+                    <div class="bg-indigo-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-award text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Tekstil Üretim ve Yönetim</h3>
+                    <p class="text-indigo-600">Tekstil Teknolojileri Enstitüsü - 2015</p>
+                    <p class="text-gray-600 mt-4">Tekstil üretim süreçlerinin yönetimi ve optimizasyonu üzerine kapsamlı eğitim</p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover-scale transform hover:shadow-2xl transition duration-300">
+                    <div class="bg-indigo-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-award text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Gelişmiş Drapaj Teknikleri</h3>
+                    <p class="text-indigo-600">Moda Tasarım Enstitüsü - 2017</p>
+                    <p class="text-gray-600 mt-4">İleri düzey drapaj teknikleri ve üç boyutlu tasarım yöntemleri</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4 font-playfair">Yorumlar</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Çalıştığım insanların benim hakkımda düşünceleri</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg relative">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+                    <div class="flex items-start mb-6">
+                        <div class="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-indigo-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold">Tolga Vardar</h3>
+                            <p class="text-indigo-600">İBOCAN Tekstil / Firma sahibi</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic relative pl-8">
+                        <i class="fas fa-quote-left text-indigo-200 text-4xl absolute top-0 left-0"></i>
+                        Ebru'nun tasarımları inanılmaz derecede yaratıcı ve profesyonel. İşbirliği yapmak büyük bir keyifti! Trendleri yakalama becerisi ve detaylara olan hakimiyeti gerçekten etkileyici.
+                    </p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg relative">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+                    <div class="flex items-start mb-6">
+                        <div class="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-indigo-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold">Nabi Esen</h3>
+                            <p class="text-indigo-600">SLM Tekstil / Firma Sahibi</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic relative pl-8">
+                        <i class="fas fa-quote-left text-indigo-200 text-4xl absolute top-0 left-0"></i>
+                        Çocuk giyimi koleksiyonlarımızda Ebru'nun katkıları muhteşemdi. Kesinlikle öneririm! Üretim süreçlerini yönetme becerisi ve tasarımlarındaki özgünlük markamıza büyük değer kattı.
+                    </p>
+                    <div class="flex mt-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                   
+                    </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-gradient-to-br from-indigo-600 to-purple-700 text-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 font-playfair">İletişim</h2>
+                <div class="w-24 h-1 bg-white mx-auto rounded-full"></div>
+                <p class="mt-4 max-w-2xl mx-auto">Mesajlarınıza en kısa zamanda size geri dönüş sağlayacağım</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6">İletişim Bilgilerim</h3>
+                    
+                    <div class="flex items-start mb-6">
+                        <div class="bg-white bg-opacity-20 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Telefon</h4>
+                            <p>+90 544 263 3082</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start mb-6">
+                        <div class="bg-white bg-opacity-20 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">E-posta</h4>
+                            <p>ebru.burcu@modatasarim.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start mb-6">
+                        <div class="bg-white bg-opacity-20 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Adres</h4>
+                            <p>Bayrampaşa, İstanbul</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-semibold mb-6 mt-10">Sosyal Medya</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/alican_18_burcu/" target="_blank" class="social-icon bg-white bg-opacity-20 w-12 h-12 rounded-full flex items-center justify-center text-xl hover:bg-opacity-30">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/burcu.ishakoglu" target="_blank" class="social-icon bg-white bg-opacity-20 w-12 h-12 rounded-full flex items-center justify-center text-xl hover:bg-opacity-30">
+                            <i class="fab fa-facebook-f"></i>
+                         </a>
+                        <a href="https://pinterest.com/ebruburcu_design" target="_blank" class="social-icon bg-white bg-opacity-20 w-12 h-12 rounded-full flex items-center justify-center text-xl hover:bg-opacity-30">
+                            <i class="fab fa-pinterest-p"></i>
+                     
+                        </a>
+                    </div>
+                </div>
+                
+           
+
+    <script>
+        $(document).ready(function() {
+            // Mobile menu toggle
+            $('#menu-toggle').click(function() {
+                $('#mobile-menu').toggleClass('hidden');
+            });
+            
+            // Smooth scrolling for anchor links
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
+                $('html, body').animate({
+                    scrollTop: $($(this).attr('href')).offset().top - 80
+                }, 500);
+            });
+            
+            // Fade-in animation on scroll
+            $(window).scroll(function() {
+                $('.fade-in').each(function() {
+                    if ($(this).offset().top < $(window).scrollTop() + $(window).height() - 100) {
+                        $(this).addClass('visible');
+                    }
+                });
+            });
+            
+            // Initialize GSAP animations
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Animate skill bars
+            $('.skill-progress').each(function() {
+                let width = $(this).data('width') + '%';
+                gsap.to($(this), {
+                    width: width,
+                    duration: 1.5,
+                    scrollTrigger: {
+                        trigger: $(this).parent(),
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+            
+            // Back to top button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 300) {
+                    $('#back-to-top').addClass('show');
+                } else {
+                    $('#back-to-top').removeClass('show');
+                }
+            });
+            
+            $('#back-to-top').click(function() {
+                $('html, body').animate({ scrollTop: 0 }, 500);
+                return false;
+            });
+        });
+        
+        // Enlarge image function
+        function enlargeImage(element) {
+            // Create a clone of the image
+            const clone = element.cloneNode(true);
+            clone.classList.add('enlarged-image');
+            
+            // Set up the overlay
+            const overlay = document.getElementById('image-overlay');
+            overlay.innerHTML = '';
+            overlay.appendChild(clone);
+            
+            // Add close button
+            const closeBtn = document.createElement('div');
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            closeBtn.className = 'absolute top-6 right-6 text-white text-3xl cursor-pointer';
+            closeBtn.onclick = function() {
+                overlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            };
+            overlay.appendChild(closeBtn);
+            
+            // Display overlay
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            document.body.style.overflow = 'hidden';
+            
+            // Click outside to close
+            overlay.onclick = function(e) {
+                if (e.target === overlay) {
+                    overlay.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            };
+        }
+        
+        // Initialize animations on page load
+        window.onload = function() {
+            // Trigger fade-in for elements in viewport
+            $(window).trigger('scroll');
+            
+            // Animate the hero section
+            gsap.from('.animate__animated', {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power3.out'
+            });
+        };
+    </script>
+</body>
+</html>
